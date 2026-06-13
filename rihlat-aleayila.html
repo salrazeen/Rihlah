@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <meta name="theme-color" content="#0e3a53">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="رحلة العائلة">
+  <link rel="apple-touch-icon" href="./icon-180.png">
+  <link rel="icon" href="./icon-192.png">
+<title>رحلة العائلة · صبنجا وإسطنبول</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#12333d; --deep:#0e3a53; --istanbul:#114a66; --sapanca:#1c8ea0;
+  --teal:#1f8fa3; --teal-soft:#e4f1f2; --coral:#ee7a52; --coral-soft:#fbe4d9;
+  --gold:#e0a93b; --gold-soft:#f7ecd2; --paper:#fbf7f0; --card:#ffffff;
+  --line:#e9e0d2; --muted:#6f8086; --shadow:0 14px 38px -18px rgba(14,58,83,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Tajawal',system-ui,sans-serif;background:var(--paper);color:var(--ink);
+  line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+h1,h2,h3,.disp{font-family:'El Messiri','Tajawal',serif}
+
+/* ===== top bar ===== */
+.topbar{
+  position:sticky;top:0;z-index:50;background:rgba(251,247,240,.86);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;
+  padding:.6rem clamp(1rem,4vw,2.5rem);gap:1rem;
+}
+.topbar .brand{display:flex;align-items:center;gap:.55rem;font-weight:700;color:var(--deep)}
+.topbar .brand .pin{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(140deg,var(--teal),var(--istanbul));color:#fff;font-size:.95rem}
+.progress-wrap{display:flex;align-items:center;gap:.6rem;font-size:.82rem;color:var(--muted)}
+.progress-track{width:90px;height:7px;border-radius:99px;background:var(--line);overflow:hidden}
+.progress-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--teal),var(--gold));transition:width .5s}
+
+/* ===== hero ===== */
+.hero{
+  position:relative;padding:clamp(2.4rem,6vw,4rem) clamp(1rem,4vw,2.5rem) clamp(2rem,5vw,3rem);
+  background:
+    radial-gradient(120% 90% at 88% -10%, rgba(238,122,82,.42), transparent 55%),
+    radial-gradient(120% 120% at 0% 0%, rgba(31,143,163,.30), transparent 50%),
+    linear-gradient(150deg,#0e3a53 0%, #114a66 48%, #1c6e87 100%);
+  color:#fff;overflow:hidden;
+}
+.hero::after{content:"";position:absolute;inset-inline:0;bottom:-1px;height:42px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 42' preserveAspectRatio='none'%3E%3Cpath d='M0 30 C 150 6 300 6 450 24 C 600 42 750 42 900 24 C 1050 8 1150 8 1200 22 L1200 42 L0 42 Z' fill='%23fbf7f0'/%3E%3C/svg%3E") no-repeat center/cover}
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.8rem;letter-spacing:.5px;
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);padding:.3rem .85rem;border-radius:99px;margin-bottom:1rem}
+.hero h1{font-size:clamp(2rem,6vw,3.4rem);font-weight:700;line-height:1.18;margin-bottom:.5rem}
+.hero h1 .accent{color:#ffd9a8}
+.hero .sub{font-size:clamp(1rem,2.4vw,1.18rem);color:rgba(255,255,255,.9);max-width:46ch}
+.hero .meta{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1.4rem}
+.chipm{display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.2);padding:.4rem .8rem;border-radius:99px;font-size:.86rem;font-weight:500}
+
+/* ===== family ===== */
+.family{position:relative;z-index:2;margin-top:1.8rem;display:flex;flex-wrap:wrap;gap:.8rem}
+.avatar{
+  display:flex;align-items:center;gap:.7rem;background:rgba(255,255,255,.96);color:var(--ink);
+  border-radius:18px;padding:.6rem .9rem .6rem .7rem;cursor:pointer;border:2px solid transparent;
+  transition:transform .25s,box-shadow .25s,border-color .25s;min-width:172px;box-shadow:0 10px 24px -16px rgba(0,0,0,.5)}
+.avatar:hover{transform:translateY(-3px)}
+.avatar.active{border-color:var(--gold);box-shadow:0 0 0 4px rgba(224,169,59,.28)}
+.avatar .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:1.5rem;flex-shrink:0}
+.avatar .nm{font-family:'El Messiri';font-weight:700;font-size:1.05rem;line-height:1.1}
+.avatar .fv{font-size:.74rem;color:var(--muted);font-weight:500}
+
+/* ===== layout ===== */
+.wrap{max-width:1060px;margin:0 auto;padding:0 clamp(1rem,4vw,2rem)}
+.section-pad{padding:2.4rem 0}
+
+/* comfort banner */
+.comfort{display:flex;gap:.85rem;align-items:flex-start;background:linear-gradient(135deg,var(--coral-soft),#fff);
+  border:1px solid #f3d4c6;border-right:5px solid var(--coral);border-radius:16px;padding:1rem 1.15rem;margin:-1.4rem auto 1.4rem;position:relative;z-index:3;box-shadow:var(--shadow)}
+.comfort .h{font-family:'El Messiri';font-weight:700;color:#c0532f}
+.comfort .ic{font-size:1.5rem;line-height:1}
+
+/* day chips */
+.daystrip-head{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:.9rem}
+.daystrip-head h2{font-size:1.5rem;color:var(--deep)}
+.legend{font-size:.78rem;color:var(--muted)}
+.daystrip{display:flex;gap:.55rem;overflow-x:auto;padding:.4rem .1rem 1rem;scroll-snap-type:x mandatory;-ms-overflow-style:none;scrollbar-width:thin}
+.daystrip::-webkit-scrollbar{height:6px}
+.daystrip::-webkit-scrollbar-thumb{background:var(--line);border-radius:9px}
+.daychip{
+  scroll-snap-align:center;flex:0 0 auto;min-width:96px;cursor:pointer;border:1px solid var(--line);
+  background:var(--card);border-radius:15px;padding:.6rem .75rem;text-align:center;transition:.22s;position:relative}
+.daychip:hover{transform:translateY(-2px);border-color:var(--teal)}
+.daychip .dn{font-family:'El Messiri';font-weight:700;font-size:1.15rem;color:var(--deep)}
+.daychip .dc{font-size:.7rem;font-weight:700;letter-spacing:.3px;margin-top:.15rem}
+.daychip .dd{font-size:.68rem;color:var(--muted)}
+.daychip[data-city="صبنجا"] .dc{color:var(--sapanca)}
+.daychip[data-city="إسطنبول"] .dc{color:var(--istanbul)}
+.daychip.active{background:linear-gradient(150deg,var(--deep),var(--istanbul));border-color:transparent}
+.daychip.active .dn,.daychip.active .dc,.daychip.active .dd{color:#fff}
+.daychip.starred::after{content:"★";position:absolute;top:-7px;inset-inline-start:50%;transform:translateX(50%);
+  color:var(--gold);font-size:.85rem;filter:drop-shadow(0 1px 2px rgba(0,0,0,.2))}
+.daychip.done::before{content:"✓";position:absolute;top:6px;inset-inline-end:8px;color:#fff;background:var(--teal);
+  width:17px;height:17px;border-radius:50%;font-size:.7rem;display:grid;place-items:center}
+
+/* day card */
+.daycard{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden;animation:rise .45s ease}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.dc-head{padding:1.3rem 1.4rem 1.1rem;background:linear-gradient(160deg,var(--teal-soft),#fff);border-bottom:1px solid var(--line);position:relative}
+.dc-head[data-city="إسطنبول"]{background:linear-gradient(160deg,#e6eef4,#fff)}
+.dc-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.dc-citytag{display:inline-flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:700;padding:.28rem .7rem;border-radius:99px;color:#fff}
+.dc-citytag.صبنجا{background:var(--sapanca)} .dc-citytag.إسطنبول{background:var(--istanbul)}
+.dc-head h3{font-size:1.5rem;color:var(--deep);margin:.55rem 0 .2rem}
+.dc-date{font-size:.85rem;color:var(--muted);font-weight:500}
+.moods{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.85rem}
+.mood{font-size:.8rem;font-weight:500;background:#fff;border:1px solid var(--line);padding:.3rem .7rem;border-radius:99px;display:inline-flex;gap:.35rem;align-items:center}
+.star-badge{display:inline-flex;align-items:center;gap:.45rem;background:var(--gold-soft);border:1px solid #ecd9ab;
+  color:#9a7113;font-weight:700;font-size:.82rem;padding:.35rem .7rem .35rem .5rem;border-radius:99px}
+.star-badge .ic{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:1rem}
+
+.stops{padding:.4rem 1.4rem 1.2rem}
+.stop{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px dashed var(--line)}
+.stop:last-child{border-bottom:0}
+.stop .time{flex:0 0 auto;width:70px;text-align:center}
+.stop .time .t{font-family:'El Messiri';font-weight:700;color:var(--teal);font-size:.92rem}
+.stop .time .line{width:2px;height:calc(100% - 26px);background:var(--line);margin:6px auto 0;border-radius:2px}
+.stop .body{flex:1}
+.stop .nm{font-family:'El Messiri';font-weight:700;font-size:1.12rem;color:var(--ink);display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.tagpill{font-size:.68rem;font-weight:700;padding:.15rem .5rem;border-radius:99px;background:var(--coral-soft);color:#bb5530}
+.tagpill.kid{background:#e7f4ec;color:#2c7a4f}
+.tagpill.eat{background:var(--gold-soft);color:#946d12}
+.stop .nt{font-size:.9rem;color:#52646a;margin-top:.25rem}
+.maplink{display:inline-flex;align-items:center;gap:.35rem;margin-top:.5rem;font-size:.8rem;font-weight:700;
+  color:var(--istanbul);text-decoration:none;background:#eef3f6;padding:.32rem .7rem;border-radius:99px;transition:.2s}
+.maplink:hover{background:var(--istanbul);color:#fff}
+
+.dc-foot{display:flex;gap:.7rem;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:1rem 1.4rem;background:#faf6ee;border-top:1px solid var(--line)}
+.navbtns{display:flex;gap:.5rem}
+.navbtn{cursor:pointer;border:1px solid var(--line);background:#fff;border-radius:11px;padding:.5rem .9rem;font-family:'Tajawal';font-weight:700;font-size:.85rem;color:var(--deep);transition:.2s;display:inline-flex;align-items:center;gap:.35rem}
+.navbtn:hover:not(:disabled){border-color:var(--teal);color:var(--teal)}
+.navbtn:disabled{opacity:.4;cursor:not-allowed}
+.donebtn{cursor:pointer;border:0;border-radius:11px;padding:.55rem 1.1rem;font-family:'Tajawal';font-weight:700;font-size:.88rem;
+  background:var(--teal);color:#fff;transition:.2s}
+.donebtn:hover{filter:brightness(1.06)}
+.donebtn.is-done{background:#e7f4ec;color:#2c7a4f;box-shadow:inset 0 0 0 1px #bfe3cd}
+
+/* breakfast */
+.brk-head{text-align:center;margin-bottom:.4rem}
+.brk-head h2{font-size:clamp(1.6rem,4vw,2.1rem);color:var(--deep)}
+.brk-head p{color:var(--muted);max-width:48ch;margin:.4rem auto 0}
+.brk-city{font-family:'El Messiri';font-weight:700;color:var(--coral);margin:1.6rem 0 .9rem;font-size:1.15rem;display:flex;align-items:center;gap:.5rem}
+.brk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:1rem}
+.brk{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:1.1rem;transition:.25s;position:relative;overflow:hidden}
+.brk:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.brk .rate{position:absolute;top:1rem;inset-inline-start:1.1rem;background:var(--gold-soft);color:#946d12;font-weight:700;font-size:.78rem;padding:.2rem .55rem;border-radius:99px}
+.brk h4{font-family:'El Messiri';font-weight:700;font-size:1.12rem;color:var(--ink);padding-inline-start:3.2rem;min-height:2.4rem;display:flex;align-items:center}
+.brk .desc{font-size:.86rem;color:#52646a;margin:.55rem 0 .7rem}
+.brk .tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.75rem}
+.brk .tg{font-size:.7rem;font-weight:600;background:var(--teal-soft);color:#1a6f7e;padding:.15rem .5rem;border-radius:99px}
+.brk .tg.warn{background:var(--coral-soft);color:#bb5530}
+
+footer{text-align:center;padding:2.4rem 1rem 3rem;color:var(--muted);font-size:.85rem}
+footer .heart{color:var(--coral)}
+
+@media(max-width:560px){
+  .avatar{min-width:0;flex:1 1 44%}
+  .stop .time{width:58px}
+  .progress-wrap .lbl{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="pin">✈︎</span><span>رحلة العائلة ٢٠٢٦</span></div>
+  <div class="progress-wrap"><span class="lbl">المنجَز</span>
+    <div class="progress-track"><div class="progress-fill" id="pfill"></div></div>
+    <span id="pcount">٠ / ١٠</span>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">🌍 ١١ – ٢٠ يونيو ٢٠٢٦ · ١٠ أيام</span>
+    <h1>صبنجا <span class="accent">&</span> إسطنبول</h1>
+    <p class="sub">برنامج عائلي مرتّب على الراحة أولًا — تنقّل بالسيارة، إطلالات وجلسات، وأيام استجمام. مع المهنّد ورند.</p>
+    <div class="meta">
+      <span class="chipm">🏨 ٤ ليالٍ · NG صبنجا</span>
+      <span class="chipm">🏙️ ٥ ليالٍ · Wyndham Grand ليفنت</span>
+      <span class="chipm">👨‍👩‍👧‍👦 بالغان + طفلان</span>
+    </div>
+    <div class="family" id="family"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="comfort">
+    <span class="ic">🤍</span>
+    <div><span class="h">راحة ماما أولوية.</span> الزوجة حامل، فالبرنامج مبني على أقل مشي ممكن: سيارة خاصة لكل التنقّلات، نزول قرب المداخل، تجارب بالجلوس، ويومَا استجمام كاملان. اضغط على أي فرد من العائلة فوق لتمييز أيامه المفضّلة ⭐.</div>
+  </div>
+
+  <a href="./alaab-rihlat-sabanja.html" style="display:flex;align-items:center;justify-content:center;gap:.6rem;text-decoration:none;
+     background:linear-gradient(120deg,#1f8fa3,#763cbc);color:#fff;border-radius:16px;padding:1rem;font-weight:800;font-size:1.05rem;
+     margin:0 0 1.4rem;box-shadow:0 12px 28px -16px rgba(118,60,188,.6)">🎮 ألعاب الرحلة — للمهنّد ورند وبابا وماما</a>
+
+  <section class="section-pad">
+    <div class="daystrip-head">
+      <h2>أيام الرحلة</h2>
+      <span class="legend">★ = نجم اليوم · اضغط اليوم لعرض تفاصيله</span>
+    </div>
+    <div class="daystrip" id="strip"></div>
+    <div id="daymount"></div>
+  </section>
+
+  <section class="section-pad" id="breakfast">
+    <div class="brk-head">
+      <h2>أماكن الفطور المفضّلة 🍳</h2>
+      <p>فطور تركي (كهفالتي) منتقى — عائلي، وسط الطبيعة أو بإطلالة على الماء.</p>
+    </div>
+    <div id="brkmount"></div>
+  </section>
+</main>
+
+<footer>
+  صُمّم بكل <span class="heart">♥</span> لعائلة المهنّد ورند · رحلة صيف ٢٠٢٦
+</footer>
+
+<script>
+const familyData = [
+  {key:'muhannad', name:'المهنّد', emoji:'🦁', bg:'#e7f4ec', favText:'يحب الحيوانات والمغامرة'},
+  {key:'rand',     name:'رند',    emoji:'⛵', bg:'#e4f1f2', favText:'تحب البحر والقوارب'},
+  {key:'baba',     name:'بابا',   emoji:'📷', bg:'#eef3f6', favText:'يحب الإطلالات والقهوة'},
+  {key:'mama',     name:'ماما',   emoji:'🌸', bg:'#fbe4d9', favText:'تحب الهدوء والاسترخاء'},
+];
+const fmap = Object.fromEntries(familyData.map(f=>[f.key,f]));
+
+function mapsUrl(pid,q){return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}&query_place_id=${pid}`;}
+
+const days = [
+ {n:1,city:'صبنجا',date:'الخميس ١١ يونيو',title:'الوصول والاستقرار',star:'mama',
+  moods:[['🌿','هدوء ووصول'],['🛬','انتقال خاص']],
+  stops:[
+    {time:'٢:٠٠م',nm:'منتجع NG صبنجا',tag:['راحة','rest'],nt:'انتقال خاص من المطار (~١.٥–٢ ساعة). منتجع استجمام وسط الطبيعة (تقييم ٤.٧): سبا، مسابح، وغرف هادئة. خصّصوا أول مساء للراحة فقط.',pid:'ChIJ-XQkVYSozBQRU_ycvsWhc-o',q:'NG Sapanca'},
+  ]},
+ {n:2,city:'صبنجا',date:'الجمعة ١٢ يونيو',title:'البحيرة وفطور ماشوكية',star:'baba',
+  moods:[['🏞️','طبيعة وبحيرة'],['🍳','فطور تركي']],
+  stops:[
+    {time:'٩:٣٠ص',nm:'فطور في ماشوكية',tag:['الفطور','eat'],nt:'ابدؤوا بفطور تركي في «Mirsuva» البوتيكي أو «Saklı Vadi» المطلّ على البحيرة (تفاصيلهم بالأسفل).',pid:'ChIJC7qicGFZyxQRQ44npA6tt_Q',q:'Mirsuva Butik Kahvalti'},
+    {time:'١١:٣٠ص',nm:'بحيرة صبنجا',nt:'توقّف عند المقاهي المطلّة على البحيرة — الجلوس والإطلالة تكفي بلا مشي. جولة قارب قصيرة بالجلوس اختيارية.',pid:'ChIJG8DpoyipzBQRLQbH-QV9tLY',q:'Lake Sapanca'},
+    {time:'١:٣٠م',nm:'مطعم Cansu (غداء)',tag:['عائلي','kid'],nt:'مطعم وسط الطبيعة فيه منطقة لعب للأطفال وبحيرة صغيرة. سمك السلمون المرقّط ممتاز.',pid:'ChIJ6QOVFwJYyxQRg-EGTvU8UpY',q:'Cansu Restoran Masukiye'},
+  ]},
+ {n:3,city:'صبنجا',date:'السبت ١٣ يونيو',title:'إطلالة كارتبه وحديقة الحيوانات',star:'muhannad',
+  moods:[['🦌','مغامرة عائلية'],['📸','إطلالات']],
+  stops:[
+    {time:'١٠:٠٠ص',nm:'تراس Ayrı Gezegen الزجاجي',nt:'صعود بالسيارة لتراس زجاجي بإطلالة بانورامية — تجربة بالجلوس والتصوير، مشي بسيط جدًا. ابدؤوا مبكرًا لتفادي الزحام.',pid:'ChIJD_gZd15ZyxQRcHyI_m_rJIc',q:'Ayri Gezegen Glass Terrace'},
+    {time:'١:٣٠م',nm:'حديقة Ormanya',tag:['للأطفال','kid'],nt:'يوم المهنّد ⭐ — حيوانات ومناطق لعب ودخول مجاني. لماما: ابقَوا قرب المدخل والمقاهي واستخدموا العربة الكهربائية بدل المسارات الطويلة. (مغلق الإثنين)',pid:'ChIJiep7UyqozBQRJgDb4sq6P94',q:'Ormanya'},
+  ]},
+ {n:4,city:'صبنجا',date:'الأحد ١٤ يونيو',title:'يوم استجمام في المنتجع',star:'mama',
+  moods:[['💆‍♀️','استرخاء تام'],['🏊','مسابح']],
+  stops:[
+    {time:'طوال اليوم',nm:'سبا ومسابح NG',tag:['راحة','rest'],nt:'يوم ماما ⭐ بلا تنقّل. مساج آمن للحامل (أبلغوا السبا بالحمل)، مسبح للأطفال، ووجبات هادئة. جلسة مسائية على ضفة البحيرة اختيارية.',pid:'ChIJ-XQkVYSozBQRU_ycvsWhc-o',q:'NG Sapanca'},
+  ]},
+ {n:5,city:'إسطنبول',date:'الإثنين ١٥ يونيو',title:'الانتقال إلى إسطنبول',star:'family',
+  moods:[['🚗','انتقال مريح'],['🛍️','تسوّق مسائي']],
+  stops:[
+    {time:'١:٠٠م',nm:'فندق Wyndham Grand ليفنت',nt:'انتقال خاص (~١.٥–٢ ساعة). موقع ممتاز في ليفنت قرب المولات والبوسفور. ارتاحوا بعد الوصول.',pid:'ChIJheeXVF22yhQRUBmYOZowr6A',q:'Wyndham Grand Istanbul Levent'},
+    {time:'٦:٠٠م',nm:'مول Kanyon',tag:['قريب','eat'],nt:'على بُعد دقائق من الفندق — مول مفتوح أنيق وكثير مطاعم. خيار سهل لأول مساء بلا تنقّل طويل.',pid:'ChIJc3mmF2i2yhQR1qkzkguJEEk',q:'Kanyon Shopping Mall'},
+  ]},
+ {n:6,city:'إسطنبول',date:'الثلاثاء ١٦ يونيو',title:'البوسفور وأورتاكوي',star:'rand',
+  moods:[['⛵','بحر وبوسفور'],['🌊','جلسة على الماء']],
+  stops:[
+    {time:'١١:٠٠ص',nm:'جولة قارب خاص (أورتاكوي)',tag:['الأجمل','eat'],nt:'يوم رند ⭐ — احجزوا قاربًا خاصًا (يخرج من بشكتاش/أورتاكوي) لساعة–ساعتين، تجربة كلها بالجلوس مع إطلالات القصور والجسور.',pid:'ChIJuZd_9Mi3yhQRttg5hEG81fU',q:'Ortakoy Square'},
+    {time:'١:٣٠م',nm:'ميدان أورتاكوي',nt:'جلسة على الواجهة وتجربة الكومبير (بطاطس محشية) الشهير. أنزلوا ماما أقرب نقطة للميدان (فيه منحدر بسيط).',pid:'ChIJuZd_9Mi3yhQRttg5hEG81fU',q:'Ortakoy Square'},
+  ]},
+ {n:7,city:'إسطنبول',date:'الأربعاء ١٧ يونيو',title:'المدينة القديمة والقصر',star:'baba',
+  moods:[['🕌','تاريخ وعراقة'],['🏛️','معالم أيقونية']],
+  stops:[
+    {time:'١٠:٠٠ص',nm:'المسجد الأزرق (السلطان أحمد)',nt:'نزول قرب الميدان مباشرة. الأرضية حصوية فاجعلوا الزيارة قصيرة (خارج + دخول سريع). كرسي متحرك للإيجار يريح ماما كثيرًا هنا.',pid:'ChIJ4fRwZb25yhQRpHwVijb3LeU',q:'Blue Mosque Istanbul'},
+    {time:'٢:٠٠م',nm:'قصر دولمة باغتشة',nt:'بديل مريح عن المعالم الجبلية — على مستوى مستوٍ نسبيًا ويطلّ على البوسفور. احجزوا التذكرة مسبقًا. (مغلق الإثنين)',pid:'ChIJ4307Gna3yhQRC4M7zzg-09w',q:'Dolmabahce Palace'},
+  ]},
+ {n:8,city:'إسطنبول',date:'الخميس ١٨ يونيو',title:'تلة تشامْلجة والغروب',star:'family',
+  moods:[['🌅','غروب وإطلالة'],['☕','جلسة مقهى']],
+  stops:[
+    {time:'٤:٠٠م',nm:'تلة تشامْلجة',tag:['غروب','eat'],nt:'أفضل إطلالة بانورامية على إسطنبول. السيارة تصعد حتى القمة والتراسات مستوية. جامع تشامْلجة الكبير مجاور وزيارته سهلة. الغروب هنا لا يُنسى.',pid:'ChIJM_wBSqXJyhQRx17gdpw5I88',q:'Camlica Hill'},
+  ]},
+ {n:9,city:'إسطنبول',date:'الجمعة ١٩ يونيو',title:'حديقة أمرغان وإستينيه بارك',star:'rand',
+  moods:[['🌳','خضرة وهدوء'],['🛍️','تسوّق راقٍ']],
+  stops:[
+    {time:'٩:٣٠ص',nm:'فطور في أمرغان',tag:['الفطور','eat'],nt:'فطور تركي في «Emirgan Sütiş» أو إطلالة بوسفور في «Vezir Han» (بالأسفل) — كلها قرب الحديقة.',pid:'ChIJ-0PuY3LKyhQRwcqqzp35zfM',q:'Emirgan Sutis'},
+    {time:'١١:٠٠ص',nm:'حديقة أمرغان',nt:'مهم: ادخلوا بالسيارة واصعدوا للأعلى بدل المنحدر. حدائق وإطلالات وقصور خشبية للجلوس، ومساحات خضراء واسعة للأطفال.',pid:'ChIJgbO-UnHKyhQRuxVN_8igPRY',q:'Emirgan Park'},
+    {time:'١:٣٠م',nm:'مول İstinye Park',tag:['غداء','eat'],nt:'مول راقٍ قريب — ماركات عالمية ومطاعم. مكان مريح للغداء والاستراحة بعيدًا عن الزحام.',pid:'ChIJH54IkZK1yhQRkBl0wdjBUjM',q:'Istinye Park'},
+  ]},
+ {n:10,city:'إسطنبول',date:'السبت ٢٠ يونيو',title:'المغادرة',star:'family',
+  moods:[['✈️','ختام ووداع'],['🧳','تجهيز']],
+  stops:[
+    {time:'مرن',nm:'تجهيز ومغادرة',nt:'رتّبوا انتقالًا خاصًا للمطار قبل الموعد بوقت كافٍ (زحمة إسطنبول واردة). لو الرحلة متأخرة: مينياتورك أو كانيون خيار خفيف قبل المطار.',pid:'ChIJheeXVF22yhQRUBmYOZowr6A',q:'Wyndham Grand Istanbul Levent'},
+  ]},
+];
+
+const breakfast = {
+ 'صبنجا · ماشوكية 🏞️':[
+   {nm:'Mirsuva Butik Kahvaltı',rate:'٤.٩',desc:'فطور تركي بوتيكي وسط الطبيعة — عسل طازج، پيشي، ومحلمة. أجواء عائلية ساحرة.',tags:[['الأعلى تقييمًا'],['حجز مسبق','warn'],['مغلق الإثنين','warn']],pid:'ChIJC7qicGFZyxQRQ44npA6tt_Q',q:'Mirsuva Butik Kahvalti'},
+   {nm:'Saklı Vadi',rate:'٤.٢',desc:'فطور بإطلالة على بحيرة صبنجا، وأنشطة للأطفال (زيب لاين) — مناسب للعائلة.',tags:[['إطلالة بحيرة'],['نشاطات أطفال']],pid:'ChIJ94tZfGlYyxQRgjXm5rtTlVI',q:'Sakli Vadi Masukiye'},
+ ],
+ 'إسطنبول · أمرغان والبوسفور ⛵':[
+   {nm:'Emirgan Sütiş',rate:'٤.١',desc:'فطور تركي كلاسيكي «à la carte» وحلويات حليب شهيرة — عائلي وقرب الحديقة. تعالوا مبكرًا.',tags:[['عائلي'],['قرب أمرغان']],pid:'ChIJ-0PuY3LKyhQRwcqqzp35zfM',q:'Emirgan Sutis'},
+   {nm:'Vezir Han Emirgan',rate:'٤.٣',desc:'إطلالة بوسفور وبوفيه فطور (شرقي وغربي). أجواء أنيقة للمناسبات.',tags:[['إطلالة بوسفور'],['شرقي وغربي']],pid:'ChIJyd9CeZLLyhQRmGKJGA8itnA',q:'Vezir Han Emirgan'},
+   {nm:'HuQQa Emirgan',rate:'٤.٧',desc:'إطلالة وأجواء راقية على الماء — مكان لطيف للجلسة والقهوة بعد الفطور.',tags:[['أجواء راقية'],['إطلالة']],pid:'ChIJ9z7y_nHKyhQRBP1FVFDi0Lc',q:'HuQQa Emirgan'},
+ ],
+};
+
+const ar=n=>String(n).replace(/[0-9]/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+let current=0;
+const done=new Set();
+
+/* family render */
+const famEl=document.getElementById('family');
+familyData.forEach(f=>{
+  const el=document.createElement('div');el.className='avatar';el.dataset.key=f.key;
+  el.innerHTML=`<span class="ic" style="background:${f.bg}">${f.emoji}</span>
+    <span><span class="nm">${f.name}</span><br><span class="fv">${f.favText}</span></span>`;
+  el.onclick=()=>toggleFamily(f.key);
+  famEl.appendChild(el);
+});
+let activeFam=null;
+function toggleFamily(key){
+  activeFam = activeFam===key ? null : key;
+  document.querySelectorAll('.avatar').forEach(a=>a.classList.toggle('active',a.dataset.key===activeFam));
+  document.querySelectorAll('.daychip').forEach((c,i)=>{
+    const isStar = days[i].star===activeFam;
+    c.style.opacity = (activeFam && !isStar) ? '.42' : '1';
+  });
+  if(activeFam){const idx=days.findIndex(d=>d.star===activeFam);if(idx>=0)select(idx);}
+}
+
+/* strip render */
+const strip=document.getElementById('strip');
+days.forEach((d,i)=>{
+  const c=document.createElement('div');c.className='daychip';c.dataset.city=d.city;c.dataset.i=i;
+  if(d.star!=='family')c.classList.add('starred');
+  c.innerHTML=`<div class="dn">${ar(d.n)}</div><div class="dc">${d.city}</div><div class="dd">${d.date.split(' ').slice(1).join(' ')}</div>`;
+  c.onclick=()=>select(i);
+  strip.appendChild(c);
+});
+
+const mount=document.getElementById('daymount');
+function select(i){
+  current=i;
+  document.querySelectorAll('.daychip').forEach((c,j)=>c.classList.toggle('active',j===i));
+  const d=days[i];const st=fmap[d.star];
+  const starHTML = d.star==='family'
+    ? `<span class="star-badge"><span class="ic" style="background:#eef3f6">👨‍👩‍👧‍👦</span> يوم العائلة</span>`
+    : `<span class="star-badge"><span class="ic" style="background:${st.bg}">${st.emoji}</span> نجم اليوم: ${st.name}</span>`;
+  const stopsHTML=d.stops.map((s,k)=>{
+    const tag = s.tag?`<span class="tagpill ${s.tag[1]||''}">${s.tag[0]}</span>`:'';
+    const last = k===d.stops.length-1;
+    return `<div class="stop">
+      <div class="time"><div class="t">${s.time}</div>${last?'':'<div class="line"></div>'}</div>
+      <div class="body"><div class="nm">${s.nm} ${tag}</div>
+        <div class="nt">${s.nt}</div>
+        <a class="maplink" target="_blank" rel="noopener" href="${mapsUrl(s.pid,s.q)}">📍 افتح بالخريطة</a>
+      </div></div>`;
+  }).join('');
+  const moodsHTML=d.moods.map(m=>`<span class="mood">${m[0]} ${m[1]}</span>`).join('');
+  const isDone=done.has(i);
+  mount.innerHTML=`<div class="daycard">
+    <div class="dc-head" data-city="${d.city}">
+      <div class="dc-top">
+        <span class="dc-citytag ${d.city}">${d.city==='صبنجا'?'🌲':'🌉'} ${d.city}</span>
+        ${starHTML}
+      </div>
+      <h3>اليوم ${ar(d.n)} · ${d.title}</h3>
+      <div class="dc-date">${d.date}</div>
+      <div class="moods">${moodsHTML}</div>
+    </div>
+    <div class="stops">${stopsHTML}</div>
+    <div class="dc-foot">
+      <div class="navbtns">
+        <button class="navbtn" id="prevb" ${i===0?'disabled':''}>→ السابق</button>
+        <button class="navbtn" id="nextb" ${i===days.length-1?'disabled':''}>التالي ←</button>
+      </div>
+      <button class="donebtn ${isDone?'is-done':''}" id="doneb">${isDone?'✓ تم':'علّم كمنجَز'}</button>
+    </div>
+  </div>`;
+  document.getElementById('prevb').onclick=()=>select(i-1);
+  document.getElementById('nextb').onclick=()=>select(i+1);
+  document.getElementById('doneb').onclick=()=>toggleDone(i);
+  document.querySelectorAll('.daychip')[i].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+function toggleDone(i){
+  done.has(i)?done.delete(i):done.add(i);
+  document.querySelectorAll('.daychip')[i].classList.toggle('done',done.has(i));
+  const c=done.size;
+  document.getElementById('pcount').textContent=`${ar(c)} / ١٠`;
+  document.getElementById('pfill').style.width=(c/10*100)+'%';
+  select(i);
+}
+
+/* breakfast render */
+const bm=document.getElementById('brkmount');
+Object.entries(breakfast).forEach(([city,list])=>{
+  const h=document.createElement('div');h.className='brk-city';h.textContent=city;bm.appendChild(h);
+  const g=document.createElement('div');g.className='brk-grid';
+  list.forEach(b=>{
+    const tags=b.tags.map(t=>`<span class="tg ${t[1]||''}">${t[0]}</span>`).join('');
+    const card=document.createElement('div');card.className='brk';
+    card.innerHTML=`<span class="rate">★ ${b.rate}</span><h4>${b.nm}</h4>
+      <div class="desc">${b.desc}</div><div class="tags">${tags}</div>
+      <a class="maplink" target="_blank" rel="noopener" href="${mapsUrl(b.pid,b.q)}">📍 افتح بالخريطة</a>`;
+    g.appendChild(card);
+  });
+  bm.appendChild(g);
+});
+
+select(0);
+</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(){});});}</script>
+</body>
+</html>

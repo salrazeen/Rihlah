@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <meta name="theme-color" content="#0e3a53">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ألعاب الرحلة">
+  <link rel="apple-touch-icon" href="./icon-180.png">
+  <link rel="icon" href="./icon-192.png">
+<title>ألعاب رحلة صبنجا وإسطنبول</title>
+<style>
+:root{--navy:#0a1f2e;--deep:#0e3a53;--teal:#2a9db0;--blue:#1c6e96;--gold:#e3b758;--orange:#ee7a52;--coral:#e08a6e;
+ --ink:#eaf3f6;--soft:#9db4c0;--card:#10293a;--card2:#143245;--ok:#27a07f;--bad:#c45a4a}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:var(--ink);min-height:100vh;
+ background:radial-gradient(130% 70% at 85% -10%,rgba(227,183,88,.18),transparent 55%),
+ radial-gradient(120% 70% at 0% 100%,rgba(42,157,176,.2),transparent 55%),
+ linear-gradient(165deg,#081823,#0c2c3e);}
+.app{max-width:580px;margin:0 auto;padding:16px 16px 46px;min-height:100vh}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.15rem}
+.brand .av{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-size:1.4rem;background:linear-gradient(140deg,var(--teal),var(--gold))}
+.tools{display:flex;gap:8px}
+.tbtn{cursor:pointer;border:0;background:rgba(255,255,255,.1);color:var(--ink);border-radius:12px;padding:8px 12px;font-weight:700;font-family:inherit;font-size:.95rem}
+.tbtn:active{transform:scale(.95)}
+
+.screen{display:none}
+.screen.on{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* HOME */
+.hero{background:linear-gradient(150deg,rgba(42,157,176,.25),rgba(227,183,88,.12));border:1px solid rgba(255,255,255,.1);
+ border-radius:22px;padding:18px;text-align:center;margin-bottom:16px}
+.hero h1{font-size:1.55rem;font-weight:800} .hero h1 .g{color:var(--gold)}
+.hero p{color:var(--soft);margin-top:4px;font-size:.95rem}
+.people{display:grid;gap:13px}
+.person{cursor:pointer;border:0;text-align:right;color:var(--ink);background:linear-gradient(150deg,var(--card),#0c2230);
+ border:1px solid rgba(255,255,255,.07);border-radius:22px;padding:18px;display:flex;align-items:center;gap:15px;font-family:inherit;transition:transform .15s}
+.person:active{transform:scale(.98)}
+.person .pic{width:58px;height:58px;flex:0 0 auto;border-radius:18px;display:grid;place-items:center;font-size:2rem;background:var(--bg)}
+.person h3{font-size:1.3rem;font-weight:800}
+.person p{font-size:.85rem;color:var(--soft);margin-top:2px}
+.person .arrow{margin-inline-start:auto;color:var(--soft);font-size:1.4rem}
+.triplink{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:14px;text-decoration:none;
+ background:linear-gradient(120deg,var(--deep),var(--blue));color:#fff;border-radius:18px;padding:15px;font-weight:800;font-size:1.05rem}
+.triplink:active{transform:scale(.98)}
+
+/* sub hub */
+.ghead{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.back{cursor:pointer;border:0;background:rgba(255,255,255,.1);color:var(--ink);border-radius:12px;padding:9px 14px;font-weight:700;font-size:.95rem;font-family:inherit}
+.back:active{transform:scale(.96)}
+.ghead h2{font-size:1.25rem;font-weight:800}
+.score-chip{margin-inline-start:auto;background:rgba(255,255,255,.1);border-radius:99px;padding:6px 13px;font-weight:700;font-size:.9rem}
+.score-chip b{color:var(--gold)}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gcard{cursor:pointer;border:0;text-align:right;color:var(--ink);background:var(--card);border-radius:18px;padding:16px 14px;
+ border:1px solid rgba(255,255,255,.07);transition:transform .15s;position:relative;overflow:hidden}
+.gcard:active{transform:scale(.97)}
+.gcard .em{font-size:2rem;display:block;margin-bottom:6px}
+.gcard h3{font-size:1.05rem;font-weight:800}
+.gcard p{font-size:.78rem;color:var(--soft);margin-top:2px}
+
+.statbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.stat{background:rgba(255,255,255,.08);border-radius:12px;padding:7px 13px;font-weight:700;font-size:.9rem}
+.stat b{color:var(--gold)}
+
+/* memory */
+.mgrid{display:grid;gap:9px}
+.mgrid.g4{grid-template-columns:repeat(4,1fr)} .mgrid.g3{grid-template-columns:repeat(3,1fr)}
+.mcard{aspect-ratio:1;border:0;border-radius:15px;background:linear-gradient(145deg,#1b4763,#15364c);
+ font-size:1.9rem;display:grid;place-items:center;cursor:pointer;color:transparent;font-family:inherit;border:1px solid rgba(255,255,255,.06)}
+.mcard.flip{background:#fff;color:#0e3a53}
+.mcard.done{background:linear-gradient(145deg,#1f8a5e,#27a06a);color:#fff;border-color:transparent}
+.mcard:active{transform:scale(.95)}
+
+/* quiz / opts */
+.qbox{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:20px 18px}
+.qnum{color:var(--gold);font-weight:800;font-size:.88rem}
+.qtext{font-size:1.25rem;font-weight:800;margin:9px 0 16px;line-height:1.55}
+.opt{display:block;width:100%;text-align:right;font-family:inherit;color:var(--ink);background:#163b50;border:2px solid transparent;
+ border-radius:14px;padding:14px 16px;margin-bottom:10px;font-size:1.05rem;font-weight:600;cursor:pointer;transition:.15s}
+.opt:active{transform:scale(.99)}
+.opt.right{background:var(--ok);border-color:#2fb892} .opt.wrong{background:var(--bad);border-color:#d86a59} .opt.dim{opacity:.5}
+.bigbtn{display:block;width:100%;font-family:inherit;font-weight:800;font-size:1.1rem;color:var(--navy);
+ background:linear-gradient(120deg,var(--gold),var(--orange));border:0;border-radius:15px;padding:15px;cursor:pointer;margin-top:6px}
+.bigbtn:active{transform:scale(.98)}
+
+/* scramble */
+.scr-hint{background:rgba(227,183,88,.14);border:1px solid rgba(227,183,88,.3);border-radius:14px;padding:12px 15px;margin-bottom:14px}
+.scr-slot{min-height:60px;background:#0c2433;border:2px dashed rgba(255,255,255,.2);border-radius:14px;display:flex;flex-wrap:wrap;gap:6px;
+ justify-content:center;align-items:center;padding:8px;margin-bottom:14px;font-size:1.8rem;font-weight:800;letter-spacing:2px}
+.tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:14px}
+.tile{width:52px;height:58px;border:0;border-radius:13px;background:#fff;color:#0e3a53;font-size:1.6rem;font-weight:800;cursor:pointer;font-family:inherit}
+.tile:active{transform:scale(.92)} .tile.used{visibility:hidden}
+
+/* ttt */
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;max-width:300px;margin:0 auto 14px}
+.tcell{aspect-ratio:1;border:0;border-radius:15px;background:#15364c;font-size:2.6rem;font-weight:800;cursor:pointer;display:grid;place-items:center;font-family:inherit;color:#fff;border:1px solid rgba(255,255,255,.06)}
+.tcell:active{transform:scale(.96)} .tcell.x{color:var(--orange)} .tcell.o{color:var(--teal)}
+.result{text-align:center;font-size:1.2rem;font-weight:800;margin:10px 0}
+
+/* big kid buttons (Rand) */
+.bigopts{display:grid;gap:14px}.bigopts.n3{grid-template-columns:1fr 1fr 1fr}
+.ask{background:var(--card);border-radius:22px;padding:20px;text-align:center;margin-bottom:16px}
+.ask .q{font-size:1.2rem;font-weight:800;margin-bottom:8px}
+.showitems{font-size:2.8rem;line-height:1.3;letter-spacing:5px;word-spacing:5px}
+.swatch{width:110px;height:110px;border-radius:26px;margin:6px auto}
+.obtn{border:0;border-radius:22px;padding:20px 8px;font-size:2.2rem;font-weight:800;cursor:pointer;font-family:inherit;background:#fff;color:#13344a}
+.obtn.num{font-size:2.6rem;color:var(--deep)} .obtn.color{height:88px}
+.obtn:active{transform:scale(.92)} .obtn.right{background:linear-gradient(145deg,#69e0bd,#3fcfa3)!important;color:#fff}
+.obtn.wrong{animation:wig .4s} @keyframes wig{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.rounds{text-align:center;font-weight:800;color:var(--gold);margin-bottom:10px}
+
+/* maze */
+.maze{display:grid;direction:ltr;margin:0 auto 14px;background:#0c2433;border-radius:14px;padding:6px;width:min(86vw,330px)}
+.cell{aspect-ratio:1;display:grid;place-items:center;font-size:min(6vw,1.4rem);box-sizing:border-box}
+.cell.wn{border-top:3px solid #2a9db0} .cell.ws{border-bottom:3px solid #2a9db0}
+.cell.we{border-right:3px solid #2a9db0} .cell.ww{border-left:3px solid #2a9db0}
+.dpad{display:grid;direction:ltr;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,64px);gap:8px;justify-content:center;margin-top:6px}
+.dbtn{border:0;border-radius:16px;background:var(--card2);color:#fff;font-size:1.6rem;cursor:pointer;font-family:inherit}
+.dbtn:active{transform:scale(.92);background:var(--teal)}
+.dbtn.mid{background:transparent}
+
+/* deck */
+.dcard{background:linear-gradient(160deg,#143a4e,#0e2b3c);border:1px solid rgba(255,255,255,.1);border-radius:24px;
+ padding:28px 22px;min-height:260px;display:flex;flex-direction:column;justify-content:center;text-align:center;box-shadow:0 22px 50px -28px rgba(0,0,0,.7)}
+.dtag{align-self:center;font-size:.8rem;font-weight:800;padding:5px 14px;border-radius:99px;margin-bottom:16px}
+.dtext{font-size:1.4rem;font-weight:700;line-height:1.6}
+.counter{text-align:center;color:var(--soft);font-size:.88rem;margin-top:12px}
+
+/* this or that */
+.vs{text-align:center;font-weight:800;color:var(--soft);margin:-2px 0}
+.choice{display:block;width:100%;border:0;border-radius:22px;padding:26px 16px;font-size:1.3rem;font-weight:800;cursor:pointer;font-family:inherit;color:#fff;margin-bottom:0}
+.choice.a{background:linear-gradient(140deg,#2a9db0,#1d7d8e)} .choice.b{background:linear-gradient(140deg,#e3a14e,#d4823a)}
+.choice:active{transform:scale(.97)} .choice.picked{outline:3px solid var(--gold);outline-offset:2px}
+
+/* two truths */
+.ttl-st{display:block;width:100%;text-align:right;font-family:inherit;color:var(--ink);background:#163b50;border:2px solid transparent;
+ border-radius:16px;padding:16px;margin-bottom:11px;font-size:1.08rem;font-weight:600;cursor:pointer}
+.ttl-st:active{transform:scale(.99)}
+.ttl-st.lie{background:var(--bad);border-color:#d86a59} .ttl-st.truth{background:#163b50;opacity:.6}
+.ttl-st .badge{float:left;font-size:.85rem;font-weight:800}
+
+/* overlay */
+.over{position:fixed;inset:0;background:rgba(5,15,22,.85);display:none;place-items:center;z-index:40;padding:24px;backdrop-filter:blur(3px)}
+.over.on{display:grid;animation:fade .3s}
+.modal{background:linear-gradient(160deg,#12344a,#0e2738);border:1px solid rgba(255,255,255,.1);border-radius:26px;padding:32px 24px;text-align:center;max-width:380px;width:100%}
+.modal .big{font-size:3.6rem;animation:bob 1s infinite}@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.modal h2{font-size:1.6rem;font-weight:800;margin:8px 0}
+.modal .stars{font-size:2.1rem;letter-spacing:6px;margin:6px 0 14px}
+.modal p{color:var(--soft);margin-bottom:18px;font-size:1.02rem}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="brand"><span class="av">🎮</span> ألعاب الرحلة</div>
+    <div class="tools">
+      <button class="tbtn" id="sndBtn" onclick="toggleSound()">🔊</button>
+      <button class="tbtn" id="homeBtn" onclick="goHome()" style="display:none">⌂</button>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div id="home" class="screen on">
+    <div class="hero"><h1>أهلاً <span class="g">بالعائلة</span> 👋</h1><p>اختر اسمك وابدأ اللعب — صبنجا وإسطنبول ٢٠٢٦</p></div>
+    <div class="people">
+      <button class="person" style="--bg:linear-gradient(140deg,#1c6e96,#ee7a52)" onclick="goHub('mHub')"><span class="pic">🚀</span><div><h3>المهنّد</h3><p>٨ سنوات · ٥ ألعاب تحدّي</p></div><span class="arrow">‹</span></button>
+      <button class="person" style="--bg:linear-gradient(140deg,#ff8fc0,#ffce3a)" onclick="goHub('rHub')"><span class="pic">🦄</span><div><h3>رند</h3><p>٥ سنوات · ٥ ألعاب ممتعة</p></div><span class="arrow">‹</span></button>
+      <button class="person" style="--bg:linear-gradient(140deg,#2a9db0,#e3b758)" onclick="goHub('pHub')"><span class="pic">💛</span><div><h3>بابا وماما</h3><p>كويز · بطاقات · ألعاب</p></div><span class="arrow">‹</span></button>
+    </div>
+    <a class="triplink" href="./rihlat-aleayila.html">🗺️ افتح صفحة الرحلة (الجدول والخريطة)</a>
+  </div>
+
+  <!-- MUHANNAD HUB -->
+  <div id="mHub" class="screen">
+    <div class="ghead"><button class="back" onclick="goHome()">‹ العائلة</button><h2>🚀 المهنّد</h2><span class="score-chip">⭐ <b id="mStars">0</b></span></div>
+    <div class="menu">
+      <button class="gcard" onclick="openGame('memory',4)"><span class="em">🧠</span><h3>ذاكرة المغامر</h3><p>طابِق الأزواج</p></button>
+      <button class="gcard" onclick="openGame('quiz','kids')"><span class="em">🗺️</span><h3>كويز تركيا</h3><p>معلومات</p></button>
+      <button class="gcard" onclick="openGame('scramble')"><span class="em">🔤</span><h3>رتّب الكلمة</h3><p>اكتشفها</p></button>
+      <button class="gcard" onclick="openGame('ttt')"><span class="em">⭕</span><h3>إكس-أو</h3><p>ضد الكمبيوتر</p></button>
+      <button class="gcard" onclick="openGame('speed')"><span class="em">⚡</span><h3>سرعة البديهة</h3><p>حساب سريع</p></button>
+    </div>
+  </div>
+
+  <!-- RAND HUB -->
+  <div id="rHub" class="screen">
+    <div class="ghead"><button class="back" onclick="goHome()">‹ العائلة</button><h2>🦄 رند</h2><span class="score-chip">⭐ <b id="rStars">0</b></span></div>
+    <div class="menu">
+      <button class="gcard" onclick="openGame('count')"><span class="em">🔢</span><h3>عُدّي معي</h3></button>
+      <button class="gcard" onclick="openGame('color')"><span class="em">🎨</span><h3>الألوان</h3></button>
+      <button class="gcard" onclick="openGame('memory',3)"><span class="em">🧩</span><h3>ذاكرة صغيرة</h3></button>
+      <button class="gcard" onclick="openGame('same')"><span class="em">🐾</span><h3>جدي المثل</h3></button>
+      <button class="gcard" onclick="openGame('maze')"><span class="em">🧭</span><h3>المتاهة</h3></button>
+    </div>
+  </div>
+
+  <!-- PARENTS HUB -->
+  <div id="pHub" class="screen">
+    <div class="ghead"><button class="back" onclick="goHome()">‹ العائلة</button><h2>💛 بابا وماما</h2></div>
+    <div class="menu">
+      <button class="gcard" onclick="openGame('quiz','adult')"><span class="em">🧭</span><h3>كويز تركيا</h3><p>للكبار</p></button>
+      <button class="gcard" onclick="openGame('deck')"><span class="em">💬</span><h3>بطاقات الجلسة</h3><p>نقاش وذكريات</p></button>
+      <button class="gcard" onclick="openGame('tot')"><span class="em">⚖️</span><h3>أيّهما تفضّل؟</h3><p>اختيارات</p></button>
+      <button class="gcard" onclick="openGame('truths')"><span class="em">🕵️</span><h3>حقيقتان وكذبة</h3><p>خمّن الكذبة</p></button>
+    </div>
+  </div>
+
+  <!-- GAME SCREENS -->
+  <div id="memory" class="screen">
+    <div class="ghead"><button class="back" id="memBack">‹ رجوع</button><h2>🧠 ذاكرة</h2></div>
+    <div class="statbar"><div class="stat">محاولات: <b id="mMoves">0</b></div><div class="stat">أزواج: <b id="mPairs">0</b>/<span id="mTot">6</span></div></div>
+    <div id="mgrid" class="mgrid"></div>
+  </div>
+
+  <div id="quiz" class="screen">
+    <div class="ghead"><button class="back" id="quizBack">‹ رجوع</button><h2>🗺️ كويز</h2><span class="score-chip">نقاط <b id="qScore">0</b></span></div>
+    <div class="statbar"><div class="stat">سؤال <b id="qPos">1</b>/<span id="qLen">8</span></div></div>
+    <div id="qbox" class="qbox"></div>
+  </div>
+
+  <div id="scramble" class="screen">
+    <div class="ghead"><button class="back" onclick="goHub('mHub')">‹ رجوع</button><h2>🔤 رتّب الكلمة</h2></div>
+    <div class="statbar"><div class="stat">كلمة <b id="sIdx">1</b>/6</div><div class="stat">صحيحة: <b id="sScore">0</b></div></div>
+    <div id="sHint" class="scr-hint"></div><div id="sSlot" class="scr-slot"></div><div id="sTiles" class="tiles"></div>
+    <button class="bigbtn" onclick="checkScramble()">تحقّق ✓</button>
+    <button class="back" style="width:100%;margin-top:8px" onclick="clearScramble()">مسح</button>
+  </div>
+
+  <div id="ttt" class="screen">
+    <div class="ghead"><button class="back" onclick="goHub('mHub')">‹ رجوع</button><h2>⭕ إكس-أو</h2></div>
+    <div class="statbar"><div class="stat">أنت ❌</div><div class="stat">الكمبيوتر ⭕</div></div>
+    <div id="tgrid" class="tgrid"></div><div id="tResult" class="result"></div>
+    <button class="bigbtn" onclick="resetTTT()">لعبة جديدة 🔄</button>
+  </div>
+
+  <div id="speed" class="screen">
+    <div class="ghead"><button class="back" onclick="goHub('mHub')">‹ رجوع</button><h2>⚡ سرعة البديهة</h2></div>
+    <div class="statbar"><div class="stat">الوقت: <b id="spTime">30</b></div><div class="stat">نقاط: <b id="spScore">0</b></div></div>
+    <div class="ask"><div class="q">كم الناتج؟</div><div class="showitems" id="spProblem">…</div></div>
+    <div class="bigopts n3" id="spOpts"></div>
+  </div>
+
+  <div id="count" class="screen">
+    <div class="ghead"><button class="back" onclick="goHub('rHub')">‹ رجوع</button><h2>🔢 عُدّي معي</h2></div>
+    <div class="rounds">جولة <span id="cRound">1</span> / 5</div>
+    <div class="ask"><div class="q">كم عددها؟</div><div class="showitems" id="cItems"></div></div>
+    <div class="bigopts n3" id="cOpts"></div>
+  </div>
+
+  <div id="color" class="screen">
+    <div class="ghead"><button class="back" onclick="goHub('rHub')">‹ رجوع</button><h2>🎨 الألوان</h2></div>
+    <div class="rounds">جولة <span id="kRound">1</span> / 5</div>
+    <div class="ask"><div class="q">اضغطي نفس اللون</div><div class="swatch" id="kSwatch"></div></div>
+    <div class="bigopts n3" id="kOpts"></div>
+  </div>
+
+  <div id="same" class="screen">
+    <div class="ghead"><button class="back" onclick="goHub('rHub')">‹ رجوع</button><h2>🐾 جدي المثل</h2></div>
+    <div class="rounds">جولة <span id="aRound">1</span> / 5</div>
+    <div class="ask"><div class="q">اضغطي نفس الحيوان</div><div class="showitems" id="aTarget"></div></div>
+    <div class="bigopts n3" id="aOpts"></div>
+  </div>
+
+  <div id="maze" class="screen">
+    <div class="ghead"><button class="back" onclick="goHub('rHub')">‹ رجوع</button><h2>🧭 المتاهة</h2></div>
+    <div class="rounds">وصّلي 🐰 إلى 🥕</div>
+    <div id="mazeGrid" class="maze"></div>
+    <div class="dpad">
+      <span></span><button class="dbtn" onclick="moveMaze(-1,0)">⬆️</button><span></span>
+      <button class="dbtn" onclick="moveMaze(0,-1)">⬅️</button><button class="dbtn mid"></button><button class="dbtn" onclick="moveMaze(0,1)">➡️</button>
+      <span></span><button class="dbtn" onclick="moveMaze(1,0)">⬇️</button><span></span>
+    </div>
+  </div>
+
+  <div id="deck" class="screen">
+    <div class="ghead"><button class="back" onclick="goHub('pHub')">‹ رجوع</button><h2>💬 بطاقات الجلسة</h2></div>
+    <div id="dcard" class="dcard"></div>
+    <button class="bigbtn" style="margin-top:14px" onclick="nextCard()">بطاقة جديدة ↻</button>
+    <div class="counter" id="dCounter"></div>
+  </div>
+
+  <div id="tot" class="screen">
+    <div class="ghead"><button class="back" onclick="goHub('pHub')">‹ رجوع</button><h2>⚖️ أيّهما تفضّل؟</h2></div>
+    <div class="rounds" id="totRound">١ / ١٢</div>
+    <button class="choice a" id="totA"></button><div class="vs">— أو —</div><button class="choice b" id="totB"></button>
+  </div>
+
+  <div id="truths" class="screen">
+    <div class="ghead"><button class="back" onclick="goHub('pHub')">‹ رجوع</button><h2>🕵️ حقيقتان وكذبة</h2></div>
+    <div class="statbar"><div class="stat">بطاقة <b id="ttIdx">1</b>/10</div><div class="stat">إصابات: <b id="ttScore">0</b></div></div>
+    <p style="color:var(--soft);margin-bottom:12px;font-size:.95rem">اقرؤوا الثلاث جُمل… أيّها <b style="color:var(--gold)">الكذبة</b>؟</p>
+    <div id="ttBox"></div>
+    <button class="bigbtn" id="ttNext" style="display:none" onclick="nextTruth()">التالي ←</button>
+  </div>
+</div>
+
+<!-- OVERLAY -->
+<div id="over" class="over"><div class="modal">
+  <div class="big" id="oEmoji">🎉</div><h2 id="oTitle">أحسنت!</h2>
+  <div class="stars" id="oStars">⭐⭐⭐</div><p id="oMsg"></p>
+  <button class="bigbtn" onclick="closeOver()">يلا نكمّل!</button>
+</div></div>
+
+<script>
+/* ===== SOUND (Web Audio, no files, offline) ===== */
+var actx=null, soundOn=true;
+function audio(){ if(!actx){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ actx=null; } } if(actx&&actx.state==='suspended')actx.resume(); return actx; }
+function tone(freq,start,dur,type,vol){ const c=audio(); if(!c||!soundOn)return; const o=c.createOscillator(),g=c.createGain();
+  o.type=type||'sine'; o.frequency.value=freq; const t=c.currentTime+start;
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol||0.18,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g); g.connect(c.destination); o.start(t); o.stop(t+dur+0.02); }
+function noiseBurst(start,dur,vol){ const c=audio(); if(!c||!soundOn)return; const n=Math.floor(c.sampleRate*dur);
+  const buf=c.createBuffer(1,n,c.sampleRate); const d=buf.getChannelData(0);
+  for(let i=0;i<n;i++){ d[i]=(Math.random()*2-1)*Math.pow(1-i/n,2); }
+  const s=c.createBufferSource(); s.buffer=buf; const f=c.createBiquadFilter(); f.type='bandpass'; f.frequency.value=1800;
+  const g=c.createGain(); g.gain.value=vol||0.3; s.connect(f); f.connect(g); g.connect(c.destination); s.start(c.currentTime+start); }
+function sfxTap(){ tone(880,0,0.06,'square',0.06); }
+function sfxRight(){ tone(660,0,0.12,'sine',0.16); tone(990,0.09,0.16,'sine',0.16); }
+function sfxWrong(){ tone(200,0,0.18,'square',0.12); tone(150,0.08,0.2,'square',0.1); }
+function sfxStar(){ [1047,1319,1568,2093].forEach((f,i)=>tone(f,i*0.07,0.18,'triangle',0.12)); }
+function sfxClap(){ for(let i=0;i<4;i++)noiseBurst(i*0.09,0.07,0.25); }
+function sfxWin(){ [523,659,784,1047].forEach((f,i)=>tone(f,i*0.12,0.3,'sine',0.16)); sfxClap(); setTimeout(sfxStar,500); }
+function toggleSound(){ soundOn=!soundOn; document.getElementById('sndBtn').textContent=soundOn?'🔊':'🔇'; if(soundOn){audio();sfxTap();} }
+
+/* ===== navigation ===== */
+var speedTimer=null;
+function clearTimers(){ if(speedTimer){clearInterval(speedTimer);speedTimer=null;} }
+function show(id){ clearTimers(); document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on')); document.getElementById(id).classList.add('on');
+  document.getElementById('homeBtn').style.display = (id==='home')?'none':'inline-block'; window.scrollTo(0,0); }
+function goHome(){ show('home'); }
+var curHub='mHub';
+function goHub(id){ curHub=id; show(id); }
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function arNum(n){ return String(n).replace(/[0-9]/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]); }
+
+/* stars per person */
+var stars={m:0,r:0};
+function addStars(who,n){ if(who){ stars[who]+=n; document.getElementById(who+'Stars').textContent=stars[who]; } }
+var curWho='m';
+function showOver(emoji,title,st,msg,who){ sfxWin();
+  document.getElementById('oEmoji').textContent=emoji; document.getElementById('oTitle').textContent=title;
+  document.getElementById('oStars').textContent='⭐'.repeat(st)+'☆'.repeat(Math.max(0,3-st));
+  document.getElementById('oMsg').textContent=msg||''; document.getElementById('over').classList.add('on'); addStars(who,st); }
+function closeOver(){ document.getElementById('over').classList.remove('on'); show(curHub); }
+
+function openGame(g,opt){ audio();
+  if(g==='memory'){ document.getElementById('memBack').onclick=()=>show(opt===3?'rHub':'mHub'); show('memory'); initMemory(opt||6); }
+  else if(g==='quiz'){ document.getElementById('quizBack').onclick=()=>show(opt==='adult'?'pHub':'mHub'); show('quiz'); initQuiz(opt||'kids'); }
+  else { show(g);
+    if(g==='scramble')initScramble(); if(g==='ttt')resetTTT(); if(g==='speed')startSpeed();
+    if(g==='count')startCount(); if(g==='color')startColor(); if(g==='same')startSame(); if(g==='maze')startMaze();
+    if(g==='deck'){deckPool=[];deckSeen=0;nextCard();} if(g==='tot')initTot(); if(g==='truths')initTruths(); }
+}
+
+/* ===== MEMORY ===== */
+var mFlip=[],mDone=0,mMoves=0,mLock=false,mTotal=6,mWho='m';
+function initMemory(pairs){
+  mTotal=pairs; mWho=(pairs===3)?'r':'m';
+  document.getElementById('mTot').textContent=pairs;
+  const icons=shuffle(['🕌','⛵','🐫','🎈','🍢','⭐','🌙','🧿','🐱','🐶','🦋','🌸']).slice(0,pairs);
+  const deck=shuffle(icons.concat(icons));
+  mFlip=[];mDone=0;mMoves=0;mLock=false;
+  document.getElementById('mMoves').textContent=0; document.getElementById('mPairs').textContent=0;
+  const grid=document.getElementById('mgrid'); grid.className='mgrid '+(pairs<=3?'g3':'g4'); grid.innerHTML='';
+  deck.forEach(ic=>{ const b=document.createElement('button'); b.className='mcard'; b.dataset.ic=ic; b.textContent=ic; b.onclick=()=>flipCard(b); grid.appendChild(b); });
+}
+function flipCard(b){ if(mLock||b.classList.contains('flip')||b.classList.contains('done'))return; sfxTap();
+  b.classList.add('flip'); mFlip.push(b);
+  if(mFlip.length===2){ mMoves++; document.getElementById('mMoves').textContent=mMoves; mLock=true; const[a,c]=mFlip;
+    if(a.dataset.ic===c.dataset.ic){ setTimeout(()=>{ a.classList.add('done');c.classList.add('done');a.classList.remove('flip');c.classList.remove('flip');
+      mDone++; document.getElementById('mPairs').textContent=mDone; mFlip=[];mLock=false; sfxRight();
+      if(mDone===mTotal){ const st=mMoves<=mTotal+2?3:mMoves<=mTotal+5?2:1; showOver('🧠','ذاكرة خارقة!',st,'في '+mMoves+' محاولة',mWho); } },400); }
+    else { sfxWrong(); setTimeout(()=>{ a.classList.remove('flip');c.classList.remove('flip'); mFlip=[];mLock=false; },720); } }
+}
+
+/* ===== QUIZ ===== */
+var QUIZ_KIDS=[
+ {q:'ما المضيق الذي يقسم إسطنبول؟',o:['البوسفور','النيل','السويس'],a:0},
+ {q:'تركيا تقع في قارتين، ما هما؟',o:['آسيا وأوروبا','أفريقيا وآسيا','أوروبا وأمريكا'],a:0},
+ {q:'ما عاصمة تركيا؟',o:['أنقرة','إسطنبول','إزمير'],a:0},
+ {q:'أيّ حلوى تركية لذيذة؟',o:['البقلاوة','السوشي','التاكو'],a:0},
+ {q:'بحيرة صبنجا محاطة بـ…',o:['الجبال والغابات','الصحراء','الثلج فقط'],a:0},
+ {q:'البطاطس المحشية في أورتاكوي اسمها…',o:['كومبير','بيتزا','برغر'],a:0},
+ {q:'أيّ حيوان تراه في حديقة Ormanya؟',o:['غزلان وطيور','حيتان','بطاريق'],a:0},
+ {q:'لون الهلال والنجمة في علم تركيا؟',o:['أبيض','أخضر','أزرق'],a:0},
+];
+var QUIZ_ADULT=[
+ {q:'ما المضيق الذي يفصل جانبي إسطنبول؟',o:['البوسفور','الدردنيل','جبل طارق'],a:0},
+ {q:'ما عاصمة تركيا؟',o:['أنقرة','إسطنبول','بورصة'],a:0},
+ {q:'القصر العثماني على البوسفور (القرن ١٩) هو…',o:['دولمة باغتشة','الحمراء','فرساي'],a:0},
+ {q:'العملة الرسمية في تركيا؟',o:['الليرة التركية','اليورو','الدرهم'],a:0},
+ {q:'أيّ بحر يقع شمال تركيا؟',o:['البحر الأسود','البحر الأحمر','بحر العرب'],a:0},
+ {q:'"كهفالتي" تعني…',o:['الفطور','الوداع','السوق'],a:0},
+ {q:'جسر السلطان محمد الفاتح يربط…',o:['آسيا وأوروبا','مدينتين آسيويتين','جزيرتين'],a:0},
+ {q:'البازار الكبير يقع في…',o:['إسطنبول','أزمير','أنطاليا'],a:0},
+];
+var QQ=[],qi=0,qS=0,qWho='m';
+function initQuiz(kind){ QQ=(kind==='adult'?QUIZ_ADULT:QUIZ_KIDS).slice(); qWho=(kind==='adult'?null:'m');
+  qi=0;qS=0; document.getElementById('qScore').textContent=0; document.getElementById('qLen').textContent=QQ.length; shuffle(QQ); renderQ(); }
+function renderQ(){ const it=QQ[qi]; document.getElementById('qPos').textContent=qi+1;
+  const opts=shuffle(it.o.map((t,idx)=>({t,correct:idx===it.a})));
+  let html=`<div class="qnum">سؤال ${qi+1}</div><div class="qtext">${it.q}</div>`;
+  opts.forEach(o=>html+=`<button class="opt" data-c="${o.correct}">${o.t}</button>`);
+  document.getElementById('qbox').innerHTML=html;
+  document.querySelectorAll('#qbox .opt').forEach(b=>b.onclick=()=>ansQ(b)); }
+function ansQ(b){ const opts=document.querySelectorAll('#qbox .opt'); opts.forEach(o=>o.onclick=null);
+  if(b.dataset.c==='true'){ b.classList.add('right'); qS++; document.getElementById('qScore').textContent=qS; sfxRight(); }
+  else { b.classList.add('wrong'); opts.forEach(o=>{ if(o.dataset.c==='true')o.classList.add('right'); }); sfxWrong(); }
+  opts.forEach(o=>{ if(!o.classList.contains('right')&&!o.classList.contains('wrong'))o.classList.add('dim'); });
+  setTimeout(()=>{ qi++; if(qi<QQ.length)renderQ(); else finishQuiz(); },1100); }
+function finishQuiz(){ const st=qS>=QQ.length-1?3:qS>=QQ.length-3?2:1;
+  if(qWho){ showOver('🗺️','خبير تركيا!',st,'صحيح: '+qS+' من '+QQ.length,qWho); }
+  else { sfxWin(); const t=qS>=7?'خبير تركيا 🏆':qS>=5?'ممتاز 👏':'جولة لطيفة 🙂';
+    document.getElementById('qbox').innerHTML=`<div style="text-align:center"><div style="font-size:3.2rem">🧭</div><div class="qtext">${t}</div><p style="color:var(--soft);margin-bottom:16px">نتيجتك: ${qS} من ${QQ.length}</p><button class="bigbtn" onclick="initQuiz('adult')">مرة أخرى ↻</button></div>`; } }
+
+/* ===== SCRAMBLE ===== */
+var WORDS=[{w:'بحر',h:'ماء كبير مالح وأزرق'},{w:'نجمة',h:'تلمع في السماء ليلاً'},{w:'طائرة',h:'تطير بنا في السفر'},
+ {w:'قلعة',h:'بناء قديم للملوك'},{w:'جسر',h:'يربط ضفّتين فوق الماء'},{w:'قطة',h:'حيوان أليف يقول مياو'}];
+var sIdx=0,sScore=0,sChosen=[];
+function initScramble(){ sIdx=0;sScore=0; document.getElementById('sScore').textContent=0; loadWord(); }
+function loadWord(){ sChosen=[]; const it=WORDS[sIdx]; document.getElementById('sIdx').textContent=sIdx+1; document.getElementById('sHint').innerHTML='💡 '+it.h;
+  const letters=shuffle(it.w.split('')); if(letters.join('')===it.w)letters.reverse();
+  const tiles=document.getElementById('sTiles'); tiles.innerHTML='';
+  letters.forEach(L=>{ const b=document.createElement('button'); b.className='tile'; b.textContent=L; b.onclick=()=>{ sfxTap(); b.classList.add('used'); sChosen.push({l:L,btn:b}); drawSlot(); }; tiles.appendChild(b); });
+  drawSlot(); }
+function drawSlot(){ document.getElementById('sSlot').textContent=sChosen.map(c=>c.l).join('')||'…'; }
+function clearScramble(){ sChosen.forEach(c=>c.btn.classList.remove('used')); sChosen=[]; drawSlot(); }
+function checkScramble(){ const built=sChosen.map(c=>c.l).join(''); const it=WORDS[sIdx];
+  if(built===it.w){ sfxRight(); sScore++; document.getElementById('sScore').textContent=sScore; sIdx++;
+    if(sIdx<WORDS.length)setTimeout(loadWord,250);
+    else { const st=sScore>=6?3:sScore>=4?2:1; showOver('🔤','بطل الكلمات!',st,'صحيح: '+sScore+'/'+WORDS.length,'m'); } }
+  else { sfxWrong(); const slot=document.getElementById('sSlot'); slot.style.borderColor='#d86a59'; setTimeout(()=>{ slot.style.borderColor='rgba(255,255,255,.2)'; clearScramble(); },480); } }
+
+/* ===== TTT ===== */
+var board,gameOver; const WINS=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+function resetTTT(){ board=Array(9).fill('');gameOver=false; document.getElementById('tResult').textContent='';
+  const g=document.getElementById('tgrid'); g.innerHTML='';
+  for(let i=0;i<9;i++){ const b=document.createElement('button'); b.className='tcell'; b.onclick=()=>playerMove(i); g.appendChild(b); } }
+function renderTTT(){ document.querySelectorAll('#tgrid .tcell').forEach((c,i)=>{ c.textContent=board[i]; c.className='tcell'+(board[i]==='❌'?' x':board[i]==='⭕'?' o':''); }); }
+function winner(bd){ for(const w of WINS){ const[a,b,c]=w; if(bd[a]&&bd[a]===bd[b]&&bd[a]===bd[c])return bd[a]; } return bd.includes('')?null:'tie'; }
+function playerMove(i){ if(gameOver||board[i])return; sfxTap(); board[i]='❌'; renderTTT(); const r=winner(board); if(r){endTTT(r);return;} setTimeout(aiMove,260); }
+function aiMove(){ if(gameOver)return; let m=findBest('⭕'); if(m<0)m=findBest('❌'); if(m<0&&board[4]==='')m=4;
+  if(m<0){ const cor=[0,2,6,8].filter(i=>board[i]===''); if(cor.length)m=cor[Math.floor(Math.random()*cor.length)]; }
+  if(m<0){ const free=board.map((v,i)=>v?-1:i).filter(i=>i>=0); m=free[Math.floor(Math.random()*free.length)]; }
+  board[m]='⭕'; renderTTT(); const r=winner(board); if(r)endTTT(r); }
+function findBest(s){ for(const w of WINS){ const[a,b,c]=w; const line=[board[a],board[b],board[c]]; if(line.filter(x=>x===s).length===2&&line.includes(''))return w[line.indexOf('')]; } return -1; }
+function endTTT(r){ gameOver=true; const res=document.getElementById('tResult');
+  if(r==='❌'){ res.textContent='🎉 فزت!'; res.style.color='#2fb892'; sfxWin(); addStars('m',2); }
+  else if(r==='⭕'){ res.textContent='😅 فاز الكمبيوتر — حاول ثانية!'; res.style.color='#ee7a52'; sfxWrong(); }
+  else { res.textContent='🤝 تعادل!'; res.style.color='#e3b758'; sfxRight(); addStars('m',1); } }
+
+/* ===== SPEED (Muhannad) ===== */
+var spScore=0,spTime=30,spAns=0;
+function startSpeed(){ spScore=0;spTime=30; document.getElementById('spScore').textContent=0; document.getElementById('spTime').textContent=30;
+  newProblem(); clearTimers(); speedTimer=setInterval(()=>{ spTime--; document.getElementById('spTime').textContent=spTime; if(spTime<=0)finishSpeed(); },1000); }
+function newProblem(){ const ops=['+','−','×']; const op=ops[Math.floor(Math.random()*ops.length)]; let a,b;
+  if(op==='×'){ a=Math.floor(Math.random()*8)+2; b=Math.floor(Math.random()*8)+2; spAns=a*b; }
+  else if(op==='−'){ a=Math.floor(Math.random()*15)+6; b=Math.floor(Math.random()*a); spAns=a-b; }
+  else { a=Math.floor(Math.random()*20)+1; b=Math.floor(Math.random()*20)+1; spAns=a+b; }
+  document.getElementById('spProblem').textContent=a+' '+op+' '+b;
+  let opts=[spAns]; while(opts.length<3){ let d=spAns+(Math.floor(Math.random()*7)-3); if(d>=0&&!opts.includes(d))opts.push(d); }
+  opts=shuffle(opts); const box=document.getElementById('spOpts'); box.innerHTML='';
+  opts.forEach(v=>{ const b2=document.createElement('button'); b2.className='obtn num'; b2.textContent=v;
+    b2.onclick=()=>{ if(v===spAns){ sfxRight(); spScore++; document.getElementById('spScore').textContent=spScore; } else { sfxWrong(); } newProblem(); }; box.appendChild(b2); }); }
+function finishSpeed(){ clearTimers(); const st=spScore>=12?3:spScore>=7?2:1; showOver('⚡','سريع كالبرق!',st,'أجوبة صحيحة: '+spScore,'m'); }
+
+/* ===== COUNT (Rand) ===== */
+var cRound,cEmo=['🐶','🐱','🐰','🦋','🐠','🌟','🍎','🎈'];
+function startCount(){ cRound=1; nextCount(); }
+function nextCount(){ document.getElementById('cRound').textContent=cRound;
+  const n=Math.floor(Math.random()*5)+1; const a=cEmo[Math.floor(Math.random()*cEmo.length)];
+  document.getElementById('cItems').textContent=a.repeat(n);
+  let nums=[n]; while(nums.length<3){ let r=Math.floor(Math.random()*5)+1; if(!nums.includes(r))nums.push(r); } nums=shuffle(nums);
+  const box=document.getElementById('cOpts'); box.innerHTML='';
+  nums.forEach(v=>{ const b=document.createElement('button'); b.className='obtn num'; b.textContent=v;
+    b.onclick=()=>pickKid(b,v===n,()=>{ cRound++; if(cRound<=5)nextCount(); else showOver('🔢','عدّادة ماهرة!',3,'',  'r'); }); box.appendChild(b); }); }
+
+/* ===== COLOR (Rand) ===== */
+var kRound,COLORS=[['أحمر','#ff5a5a'],['أزرق','#4b9bff'],['أخضر','#42c97a'],['أصفر','#ffce3a'],['برتقالي','#ff9a3a'],['وردي','#ff7ec0']];
+function startColor(){ kRound=1; nextColor(); }
+function nextColor(){ document.getElementById('kRound').textContent=kRound; const pool=shuffle(COLORS.slice()); const t=pool[0];
+  document.getElementById('kSwatch').style.background=t[1]; const opts=shuffle([pool[0],pool[1],pool[2]]);
+  const box=document.getElementById('kOpts'); box.innerHTML='';
+  opts.forEach(c=>{ const b=document.createElement('button'); b.className='obtn color'; b.style.background=c[1];
+    b.onclick=()=>pickKid(b,c[0]===t[0],()=>{ kRound++; if(kRound<=5)nextColor(); else showOver('🎨','فنّانة الألوان!',3,'','r'); }); box.appendChild(b); }); }
+
+/* ===== SAME (Rand) ===== */
+var aRound,ANIMALS=['🐶','🐱','🐰','🦁','🐸','🐧','🦊','🐮','🐷','🐵'];
+function startSame(){ aRound=1; nextSame(); }
+function nextSame(){ document.getElementById('aRound').textContent=aRound; const pool=shuffle(ANIMALS.slice()); const t=pool[0];
+  document.getElementById('aTarget').textContent=t; const opts=shuffle([pool[0],pool[1],pool[2]]);
+  const box=document.getElementById('aOpts'); box.innerHTML='';
+  opts.forEach(an=>{ const b=document.createElement('button'); b.className='obtn'; b.textContent=an;
+    b.onclick=()=>pickKid(b,an===t,()=>{ aRound++; if(aRound<=5)nextSame(); else showOver('🐾','عين حادّة!',3,'','r'); }); box.appendChild(b); }); }
+
+function pickKid(btn,correct,onWin){ if(correct){ sfxRight(); btn.classList.add('right'); document.querySelectorAll('.bigopts .obtn').forEach(b=>b.onclick=null); setTimeout(onWin,600); }
+  else { sfxWrong(); btn.classList.add('wrong'); setTimeout(()=>btn.classList.remove('wrong'),420); } }
+
+/* ===== MAZE (Rand) ===== */
+var maze,mc,mr,pr,pc,gr,gc;
+function startMaze(){ const C=6,R=6; buildMaze(C,R); mc=C;mr=R; pr=0;pc=0;gr=R-1;gc=C-1; renderMaze(); }
+function buildMaze(C,R){ maze=[]; for(let r=0;r<R;r++){ maze.push([]); for(let c=0;c<C;c++)maze[r].push({N:true,E:true,S:true,W:true,v:false}); }
+  const stack=[[0,0]]; maze[0][0].v=true;
+  while(stack.length){ const [r,c]=stack[stack.length-1];
+    const nb=[]; if(r>0&&!maze[r-1][c].v)nb.push(['N',r-1,c]); if(r<R-1&&!maze[r+1][c].v)nb.push(['S',r+1,c]);
+    if(c>0&&!maze[r][c-1].v)nb.push(['W',r,c-1]); if(c<C-1&&!maze[r][c+1].v)nb.push(['E',r,c+1]);
+    if(nb.length){ const [dir,nr,ncc]=nb[Math.floor(Math.random()*nb.length)];
+      maze[r][c][dir]=false; const opp={N:'S',S:'N',E:'W',W:'E'}[dir]; maze[nr][ncc][opp]=false; maze[nr][ncc].v=true; stack.push([nr,ncc]); }
+    else stack.pop(); } }
+function renderMaze(){ const g=document.getElementById('mazeGrid'); g.style.gridTemplateColumns='repeat('+mc+',1fr)'; g.innerHTML='';
+  for(let r=0;r<mr;r++)for(let c=0;c<mc;c++){ const cell=maze[r][c]; const d=document.createElement('div'); d.className='cell';
+    if(cell.N)d.classList.add('wn'); if(cell.S)d.classList.add('ws'); if(cell.E)d.classList.add('we'); if(cell.W)d.classList.add('ww');
+    if(r===pr&&c===pc)d.textContent='🐰'; else if(r===gr&&c===gc)d.textContent='🥕'; g.appendChild(d); } }
+function moveMaze(dr,dc){ const cell=maze[pr][pc];
+  if(dr===-1&&cell.N)return; if(dr===1&&cell.S)return; if(dc===-1&&cell.W)return; if(dc===1&&cell.E)return;
+  const nr=pr+dr,ncc=pc+dc; if(nr<0||ncc<0||nr>=mr||ncc>=mc)return; pr=nr;pc=ncc; sfxTap(); renderMaze();
+  if(pr===gr&&pc===gc){ showOver('🧭','وصلتِ! 🥕',3,'',('r')); } }
+
+/* ===== DECK (parents) ===== */
+var CARDS=[
+ ['نقاش','#2a9db0','ما أكثر مكان تتمنّى أن نزوره معًا قبل نهاية الرحلة؟'],
+ ['ذكريات','#e3b758','ما أجمل رحلة سافرناها سويًا ولماذا علقت في بالك؟'],
+ ['هل تعرف شريكك','#e08a6e','خمّن: ما الطبق التركي الذي سيطلبه شريكك الليلة؟'],
+ ['أيهما تفضّل','#9b87d6','غروب على البوسفور أو صباح هادئ على بحيرة صبنجا؟'],
+ ['نقاش','#2a9db0','لو عشنا سنة في مدينة واحدة حول العالم، أيّها تختار؟'],
+ ['مرح','#5fc28a','قلّد طريقة شريكك حين يتذوّق شيئًا لذيذًا جدًا.'],
+ ['ذكريات','#e3b758','ما أول شيء جذبك في شريكك حين تعرّفتما؟'],
+ ['هل تعرف شريكك','#e08a6e','ما أكثر شيء يقلق منه شريكك أثناء السفر؟'],
+ ['مستقبل','#9b87d6','أين ترى رحلتنا العائلية القادمة بعد عام؟'],
+ ['امتنان','#5fc28a','اذكر شيئًا واحدًا أنت ممتنّ له في شريكك اليوم.'],
+ ['أيهما تفضّل','#9b87d6','مغامرة مخطّطة بالتفصيل أو يوم عفوي بلا برنامج؟'],
+ ['العائلة','#2a9db0','ما أطرف موقف صار من المهنّد أو رند في الرحلة؟'],
+ ['نقاش','#2a9db0','لو لديكما يوم إضافي في إسطنبول، كيف تقضيانه؟'],
+ ['امتنان','#5fc28a','ما الشيء الصغير الذي يفعله شريكك ويسعدك دائمًا؟'],
+ ['مرح','#5fc28a','بأي حيوان تشبّه شريكك حين يكون جائعًا؟ ولماذا؟'],
+ ['مستقبل','#9b87d6','حلم سفر تتمنّيان تحقيقه قبل أن يكبر الأطفال؟'],
+ ['أيهما تفضّل','#9b87d6','بحر دافئ وشاطئ أو جبال خضراء وهواء بارد؟'],
+ ['العائلة','#2a9db0','ما العادة الجميلة التي تتمنّيان أن تبقى في رحلاتكم؟'],
+];
+var deckPool=[],deckSeen=0;
+function nextCard(){ if(deckPool.length===0)deckPool=shuffle(CARDS.slice()); const c=deckPool.pop(); deckSeen++; sfxTap();
+  document.getElementById('dcard').innerHTML=`<span class="dtag" style="background:${c[1]}22;color:${c[1]};border:1px solid ${c[1]}55">${c[0]}</span><div class="dtext">${c[2]}</div>`;
+  document.getElementById('dCounter').textContent='بطاقة '+deckSeen+' · '+CARDS.length+' في المجموعة'; }
+
+/* ===== THIS OR THAT ===== */
+var TOT=[['قهوة تركية','شاي تركي'],['البوسفور','بحيرة صبنجا'],['تسوّق في البازار','جلسة على الواجهة'],['حلويات','مأكولات مالحة'],
+ ['غروب','شروق'],['مدينة قديمة','أحياء عصرية'],['جولة مشي','جولة بالسيارة'],['مطعم بإطلالة','مطعم محلّي مخفي'],
+ ['صور كثيرة','عيش اللحظة'],['استيقاظ مبكر','سهر متأخر'],['مغامرة','استرخاء'],['بحر','جبل']];
+var totI=0;
+function initTot(){ totI=0; shuffle(TOT); renderTot(); }
+function renderTot(){ const p=TOT[totI]; document.getElementById('totRound').textContent=arNum(totI+1)+' / '+arNum(TOT.length);
+  const A=document.getElementById('totA'),B=document.getElementById('totB'); A.textContent=p[0];B.textContent=p[1];
+  A.classList.remove('picked');B.classList.remove('picked'); A.onclick=()=>pickTot('a');B.onclick=()=>pickTot('b'); }
+function pickTot(w){ sfxTap(); document.getElementById(w==='a'?'totA':'totB').classList.add('picked');
+  document.getElementById('totA').onclick=null;document.getElementById('totB').onclick=null;
+  setTimeout(()=>{ totI++; if(totI<TOT.length)renderTot(); else { sfxStar();
+    document.getElementById('totRound').textContent='خلصت الجولة 🎉';
+    const A=document.getElementById('totA'),B=document.getElementById('totB');
+    A.textContent='مرة أخرى ↻';B.textContent='رجوع للقائمة';A.classList.remove('picked');A.onclick=initTot;B.onclick=()=>show('pHub'); } },420); }
+
+/* ===== TWO TRUTHS AND A LIE ===== */
+var TRUTHS=[
+ [['إسطنبول تقع على قارتين: آسيا وأوروبا',0],['البوسفور يربط البحر الأسود ببحر مرمرة',0],['عاصمة تركيا هي إسطنبول',1]],
+ [['الليرة هي عملة تركيا',0],['الشاي مشروب شعبي جدًا في تركيا',0],['اللغة الرسمية في تركيا هي العربية',1]],
+ [['آيا صوفيا بُنيت في الأصل كنيسة',0],['تركيا تطل على البحر الأسود شمالًا',0],['جبل أرارات يقع في مصر',1]],
+ [['البقلاوة حلوى مشهورة في تركيا',0],['كابادوكيا مشهورة بمناطيد الهواء الساخن',0],['تركيا دولة بلا أي بحر',1]],
+ [['تشامْلجة أعلى تلة في إسطنبول وتطل على المدينة',0],['البازار الكبير من أقدم الأسواق المغطّاة',0],['البوسفور نهر وليس مضيقًا',1]],
+ [['بحيرة صبنجا محاطة بالجبال والغابات',0],['صبنجا قريبة من إسطنبول',0],['بحيرة صبنجا تقع وسط الصحراء',1]],
+ [['"كهفالتي" تعني الفطور بالتركية',0],['الفطور التركي يشمل أجبانًا وزيتونًا ومربّى',0],['الفطور التركي طبق واحد فقط',1]],
+ [['قصر دولمة باغتشة يقع على ضفاف البوسفور',0],['بُني القصر في القرن التاسع عشر',0],['قصر دولمة باغتشة يقع في أنقرة',1]],
+ [['في تركيا حضارات قديمة كثيرة',0],['إسطنبول كانت عاصمة لإمبراطوريات',0],['تركيا دولة صغيرة بلا تاريخ',1]],
+ [['الكومبير بطاطس محشية',0],['يُباع الكومبير كثيرًا في أورتاكوي',0],['الكومبير نوع من الحلوى',1]],
+];
+var ttIdx=0,ttScore=0,ttSets=[];
+function initTruths(){ ttIdx=0;ttScore=0; document.getElementById('ttScore').textContent=0; ttSets=shuffle(TRUTHS.slice()); renderTruth(); }
+function renderTruth(){ document.getElementById('ttIdx').textContent=ttIdx+1; document.getElementById('ttNext').style.display='none';
+  const set=shuffle(ttSets[ttIdx].slice()); const box=document.getElementById('ttBox'); box.innerHTML='';
+  set.forEach(st=>{ const b=document.createElement('button'); b.className='ttl-st'; b.textContent=st[0]; b.dataset.lie=st[1];
+    b.onclick=()=>revealTruth(b); box.appendChild(b); }); }
+function revealTruth(b){ const all=document.querySelectorAll('#ttBox .ttl-st'); all.forEach(x=>x.onclick=null);
+  const correct=b.dataset.lie==='1'; if(correct){ sfxRight(); ttScore++; document.getElementById('ttScore').textContent=ttScore; } else sfxWrong();
+  all.forEach(x=>{ if(x.dataset.lie==='1'){ x.classList.add('lie'); x.innerHTML=x.textContent+' <span class="badge">✗ كذبة</span>'; } else x.classList.add('truth'); });
+  document.getElementById('ttNext').style.display='block'; }
+function nextTruth(){ ttIdx++; if(ttIdx<ttSets.length)renderTruth(); else { const st=ttScore>=9?3:ttScore>=6?2:1; showOver('🕵️','محقّق ماهر!',st,'إصابات: '+ttScore+'/'+ttSets.length); } }
+</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(){});});}</script>
+</body>
+</html>
